@@ -1,6 +1,6 @@
 <?php
-define('CHAT_TOKEN', 'l77pida8jcu4b7qc');
-define('CHAT_URL', 'instance258543');
+define('CHAT_TOKEN', 'hyg1a0vao95bq3ij');
+define('CHAT_URL', 'instance261035');
 
 function sendMessage($to,$msg){
 	$data = [

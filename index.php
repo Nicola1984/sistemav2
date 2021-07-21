@@ -106,6 +106,7 @@ session_destroy();
 							    	<option value="Empresa">Empresa</option>
 							    	<option value="Pasantia">Pasantia</option>
 							    	<option value="Satelite">Satelite</option>
+							    	<option value="Aliados">Aliados</option>
 							    </select>
 						    </div>
 						    <div class="col-12 text-center" style="font-size: 14px;color:blue;font-weight: bold;">
@@ -126,6 +127,11 @@ session_destroy();
 <form action="welcome/index.php" id="formulario2" method="POST">
 	<input type="hidden" value="" id="usuario_id" name="usuario_id">
 	<input type="hidden" value="" id="usuario_estatus" name="usuario_estatus">
+</form>
+
+<form action="pasantias/index.php" id="formulario3" method="POST">
+	<input type="hidden" value="" id="usuario_id2" name="usuario_id2">
+	<input type="hidden" value="" id="usuario_estatus2" name="usuario_estatus2">
 </form>
 
 </body>
@@ -164,14 +170,19 @@ session_destroy();
 	        	console.log(respuesta);
 	        	if(respuesta["estatus"]=="sin resultados"){
 	        		Swal.fire({
-						title: 'Error',
-						text: "Datos Incorrectos!",
-						icon: 'error',
-						position: 'center',
-						showConfirmButton: false,
-						timer: 2000
-					});	
+								title: 'Error',
+								text: "Datos Incorrectos!",
+								icon: 'error',
+								position: 'center',
+								showConfirmButton: false,
+								timer: 2000
+							});
+	        	}else if(respuesta["estatus"]!="sin resultados" && respuesta["estatus"]=="Pasantia"){
+	        		$('#usuario_id2').val(respuesta["usuario_id"]);
+	        		$('#usuario_estatus2').val(respuesta["estatus"]);
+	        		$('#formulario3').submit();
 	        	}else{
+	        		console.log("aqui3");
 	        		$('#usuario_id').val(respuesta["usuario_id"]);
 	        		$('#usuario_estatus').val(respuesta["estatus"]);
 	        		$('#formulario2').submit();

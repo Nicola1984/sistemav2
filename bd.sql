@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS sistema3;
-CREATE DATABASE sistema3;
-USE sistema3;
+DROP DATABASE IF EXISTS sistemav2;
+CREATE DATABASE sistemav2;
+USE sistemav2;
 
 DROP TABLE IF EXISTS roles;
 CREATE TABLE roles (
@@ -76,7 +76,7 @@ CREATE TABLE usuarios (
 	estatus_pasantia INT NOT NULL,
 	estatus_empresa INT NOT NULL,
 	estatus_pasantes INT NOT NULL,
-	genero VARCHAR(250) NOT NULL,
+	genero INT NOT NULL,
 	direccion VARCHAR(250) NOT NULL,
 	responsable INT NOT NULL,
 	fecha_creacion date NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE usuarios (
 ); ALTER TABLE usuarios CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 INSERT INTO usuarios (nombre1,nombre2,apellido1,apellido2,documento_tipo,documento_numero,correo_personal,correo_empresa,clave,telefono,rol,estatus_modelo,estatus_nomina,estatus_satelite,estatus_pasantia,estatus_empresa,estatus_pasantes,genero,direccion,responsable,fecha_creacion) VALUES
-('Juan','Jose','Maldonado','La Cruz',1,'955948708101993','juanmaldonado.co@gmail.com',0,'e1f2e2d4f6598c43c2a45d2bd3acb7be','3016984868',1,1,1,0,1,1,1,'Hombre','Barrio Olarte',1,'2021-04-18');
+('Juan','Jose','Maldonado','La Cruz',1,'955948708101993','juanmaldonado.co@gmail.com','programador@camaleonmg.com','e1f2e2d4f6598c43c2a45d2bd3acb7be','3016984868',1,1,1,0,1,1,1,1,'Barrio Olarte',1,'2021-04-18');
 
 DROP TABLE IF EXISTS roles_funciones;
 CREATE TABLE roles_funciones (
@@ -125,12 +125,18 @@ CREATE TABLE usuario_conexion (
 	id INT AUTO_INCREMENT,
 	id_usuarios INT NOT NULL,
 	ip VARCHAR(250) NOT NULL,
-	conexion datetime NOT NULL,
+	dispositivo VARCHAR(250) NOT NULL,
+	token VARCHAR(250) NOT NULL,
+	profile_photo_path TEXT NOT NULL,
+	conexion_desde datetime NOT NULL,
+	conexion_hasta datetime NOT NULL,
+	conexion_cerrada datetime NOT NULL,
+	estatus INT NOT NULL,
 	PRIMARY KEY (id)
 ); ALTER TABLE usuario_conexion CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-	
-DROP TABLE IF EXISTS sedes;
-CREATE TABLE sedes (
+
+DROP TABLE IF EXISTS empresas;
+CREATE TABLE empresas (
 	id INT AUTO_INCREMENT,
 	nombre VARCHAR(250) NOT NULL,
 	direccion VARCHAR(250) NOT NULL,
@@ -140,18 +146,35 @@ CREATE TABLE sedes (
 	cedula VARCHAR(250) NOT NULL,
 	rut VARCHAR(250) NOT NULL,
 	PRIMARY KEY (id)
+); ALTER TABLE empresas CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+INSERT INTO empresas (nombre,direccion,ciudad,descripcion,responsable,cedula,rut) VALUES 
+('Camaleon Models Group','Direccion','Bogotá D.C','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
+('Camaleon Models Group Medellin','Carrera 81 #30A 67','Medellin','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901322261-6');
+	
+DROP TABLE IF EXISTS sedes;
+CREATE TABLE sedes (
+	id INT AUTO_INCREMENT,
+	nombre VARCHAR(250) NOT NULL,
+	direccion VARCHAR(250) NOT NULL,
+	ciudad VARCHAR(250) NOT NULL,
+	cedula VARCHAR(250) NOT NULL,
+	id_empresa VARCHAR(250) NOT NULL,
+	fecha_creacion DATE NOT NULL,
+	fecha_modificacion DATE NOT NULL,
+	PRIMARY KEY (id)
 ); ALTER TABLE sedes CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-INSERT INTO sedes (nombre,direccion,ciudad,descripcion,responsable,cedula,rut) VALUES 
-('VIP Occidente','Direccion','Bogotá D.C','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
-('Norte','Direccion','Bogotá D.C','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
-('Occidente I','Direccion','Bogotá D.C','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
-('VIP Suba','Direccion','Bogotá D.C','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
-('Medellin','Direccion','Medellin','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
-('Soacha','Direccion','Bogotá D.C','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901.257.204-8'),
-('Belen','Carrera 81 #30A 67','Medellin','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901322261-6'),
-('Sur Americana','Calle 48 #66 70','Medellin','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901322261-6'),
-('Manrique','Carrera 36 #70 41','Medellin','BERNAL GROUP  SAS','Andres Fernando Bernal Correa', '80.774.671', '901322261-6');
+INSERT INTO sedes (nombre,direccion,ciudad,cedula,id_empresa,fecha_creacion,fecha_modificacion) VALUES 
+('VIP Occidente','Direccion','Bogotá D.C', '80.774.671',1,'2021-06-20','2021-06-29'),
+('Norte','Direccion','Bogotá D.C', '80.774.671',1,'2021-06-20','2021-06-29'),
+('Occidente I','Direccion','Bogotá D.C', '80.774.671',1,'2021-06-20','2021-06-29'),
+('VIP Suba','Direccion','Bogotá D.C', '80.774.671',1,'2021-06-20','2021-06-29'),
+('Medellin','Direccion','Medellin', '80.774.671',1,'2021-06-20','2021-06-29'),
+('Soacha','Direccion','Bogotá D.C', '80.774.671',1,'2021-06-20','2021-06-29'),
+('Belen','Carrera 81 #30A 67','Medellin', '80.774.671',2,'2021-06-20','2021-06-29'),
+('Sur Americana','Calle 48 #66 70','Medellin', '80.774.671',2,'2021-06-20','2021-06-29'),
+('Manrique','Carrera 36 #70 41','Medellin', '80.774.671',2,'2021-06-20','2021-06-29');
 
 DROP TABLE IF EXISTS datos_pasantes;
 CREATE TABLE datos_pasantes (
@@ -254,3 +277,51 @@ CREATE TABLE datos_modelos (
 ); ALTER TABLE datos_modelos CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 INSERT INTO datos_modelos (id_usuarios,banco_cedula,banco_nombre,banco_tipo,banco_numero,banco_banco,banco_bcpp,banco_tipo_documento,altura,peso,tpene,tsosten,tbusto,tcintura,tcaderas,tipo_cuerpo,pvello,color_cabello,color_ojos,ptattu,ppiercing,turno,estatus,sede,fecha_creacion) VALUES 
 (1,"955948708101993","Juan Jose Maldonado la Cruz","Ahorro","545454545454","Bancolombia","propia",1,"1.76","75","25","","","","","Delgado","afeitado","negro","negro","No","No","Mañana",1,1,"2021-04-22");
+
+DROP TABLE IF EXISTS genero;
+CREATE TABLE genero (
+	id INT AUTO_INCREMENT,
+	nombre VARCHAR(250) NOT NULL,
+	PRIMARY KEY (id)
+); ALTER TABLE genero CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+INSERT INTO genero (nombre) VALUES 
+('Hombre'),
+('Mujer'),
+('Transexual');
+
+DROP TABLE IF EXISTS enterado;
+CREATE TABLE enterado (
+	id INT AUTO_INCREMENT,
+	nombre VARCHAR(250) NOT NULL,
+	PRIMARY KEY (id)
+); ALTER TABLE enterado CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+INSERT INTO enterado (nombre) VALUES 
+('Facebook'),
+('Twitter'),
+('Instagram'),
+('Pagina Web'),
+('Conocido');
+
+DROP TABLE IF EXISTS datos_pasantias;
+CREATE TABLE datos_pasantias (
+	id INT AUTO_INCREMENT,
+	id_usuarios INT NOT NULL,
+	sede INT NOT NULL,
+	fecha_creacion date NOT NULL,
+	hora_creacion time NOT NULL,
+	PRIMARY KEY (id)
+); ALTER TABLE datos_pasantias CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+INSERT INTO datos_pasantias (id_usuarios,sede,fecha_creacion,hora_creacion) VALUES 
+(1,1,"2021-04-22","14:10:25");
+
+DROP TABLE IF EXISTS apiwhatsapp;
+CREATE TABLE apiwhatsapp (
+	id INT AUTO_INCREMENT,
+	token VARCHAR(250) NOT NULL,
+	url VARCHAR(250) NOT NULL,
+	fecha_creacion date NOT NULL,
+	hora_creacion time NOT NULL,
+	PRIMARY KEY (id)
+); ALTER TABLE apiwhatsapp CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+INSERT INTO apiwhatsapp (token,url,fecha_creacion,hora_creacion) VALUES 
+('hyg1a0vao95bq3ij',"instance261035","2021-06-30","03:39:25");

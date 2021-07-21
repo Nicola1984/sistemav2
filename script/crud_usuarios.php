@@ -27,13 +27,13 @@ if($condicion=='login1'){
 		while($row1 = mysqli_fetch_array($proceso1)) {
 			$usuario_id=$row1['id'];
 			session_start();
-			$_SESSION["id"]=$usuario_id;
-			$_SESSION["estatus"]=$estatus;
+			$_SESSION["camaleonapp_id"]=$usuario_id;
+			$_SESSION["camaleonapp_estatus"]=$estatus;
 
 			$datos = [
+				"estatus" => $estatus,
 				"sql1" => $sql1,
-				"usuario_id"	=> $usuario_id,
-				"estatus" 		=> $estatus,
+				"usuario_id" => $usuario_id,
 			];
 		}
 		echo json_encode($datos);
