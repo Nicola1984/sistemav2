@@ -105,7 +105,7 @@ CREATE TABLE funciones_usuarios (
 	id INT AUTO_INCREMENT,
 	id_usuarios INT NOT NULL,
 	id_modulos INT NOT NULL,
-	ver INT NOT NULL,
+	id_usuario_rol VARCHAR(250) NOT NULL,
 	crear INT NOT NULL,
 	modificar INT NOT NULL,
 	eliminar INT NOT NULL,
@@ -114,11 +114,11 @@ CREATE TABLE funciones_usuarios (
 	PRIMARY KEY (id)
 ); ALTER TABLE funciones_usuarios CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-INSERT INTO funciones_usuarios (id_usuarios,id_modulos,ver,crear,modificar,eliminar,responsable,fecha_creacion) VALUES 
-(1,2,1,1,1,1,1,'2021-04-19'),
-(1,3,1,1,1,1,1,'2021-04-22'),
-(1,4,1,1,1,1,1,'2021-04-22'),
-(1,5,1,1,1,1,1,'2021-04-22');
+INSERT INTO funciones_usuarios (id_usuarios,id_modulos,id_usuario_rol,crear,modificar,eliminar,responsable,fecha_creacion) VALUES 
+(5,2,'Nomina',1,1,1,1,'2021-04-19'),
+(5,3,'Nomina',1,1,1,1,'2021-04-22'),
+(5,4,'Nomina',1,1,1,1,'2021-04-22'),
+(5,5,'Nomina',1,1,1,1,'2021-04-22');
 
 DROP TABLE IF EXISTS usuario_conexion;
 CREATE TABLE usuario_conexion (

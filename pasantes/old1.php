@@ -21,7 +21,6 @@ if(@$_SESSION["camaleonapp_id"]=='' or @$_SESSION["camaleonapp_id"]==null){
 $ubicacion='pasantes';
 include("../script/conexion.php");
 include("../header.php");
-include("../permisologia.php");
 $sqlub1 = "SELECT * FROM modulos WHERE nombre = '".$ubicacion."'";
 $procesoub1 = mysqli_query($conexion,$sqlub1);
 while($rowub1 = mysqli_fetch_array($procesoub1)) {
@@ -30,57 +29,46 @@ while($rowub1 = mysqli_fetch_array($procesoub1)) {
 $sqlp2 = "SELECT * FROM funciones_usuarios WHERE id_usuarios = ".$_SESSION["camaleonapp_id"]." and id_modulos = ".$id_moduloub1;
 $procesoub2 = mysqli_query($conexion,$sqlp2);
 while($rowub2 = mysqli_fetch_array($procesoub2)) {
+	$modulo_ver = $rowub2["ver"];
 	$modulo_crear = $rowub2["crear"];
 	$modulo_modificar = $rowub2["modificar"];
 	$modulo_eliminar = $rowub2["eliminar"];
 }
 ?>
 
-<div class="container mt-3">
-	<div class="row">
-		<input type="hidden" name="datatables" id="datatables" data-pagina="1" data-consultasporpagina="10" data-filtrado="" data-sede="">
-		<div class="col-3 form-group form-check">
-			<label for="consultasporpagina" style="color:black; font-weight: bold;">Consultas por Página</label>
-			<select class="form-control" id="consultasporpagina" name="consultasporpagina">
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="30">30</option>
-				<option value="40">40</option>
-				<option value="50">50</option>
-				<option value="100">100</option>
-			</select>
-		</div>
-		<div class="col-4 form-group form-check">
-			<label for="buscarfiltro" style="color:black; font-weight: bold;">Buscar</label>
-			<input type="text" class="form-control" id="buscarfiltro" name="buscarfiltro">
-		</div>
-		<div class="col-3 form-group form-check">
-			<label for="consultaporsede" style="color:black; font-weight: bold;">Consultas por Sede</label>
-			<select class="form-control" id="consultaporsede" name="consultaporsede">
-				<?php
-				/*
-				$sql9 = "SELECT * FROM sedes WHERE"
-				*/
-				?>
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="30">30</option>
-				<option value="40">40</option>
-				<option value="50">50</option>
-				<option value="100">100</option>
-			</select>
-		</div>
-	</div>
-</div>
-<button type="button" class="btn btn-info" onclick="prueba1();">Filtrar</button>
-
-<div id="resultado_table1">Aqui!</div>
-
-<!--
 <form id="formulario1" method="GET" action="index.php">
 	<div class="row mt-2 mb-2">
 		<div class="col-12 text-center" style="font-size: 18px; font-weight: bold;">
 			Modulo de Pasantes
+		</div>
+		<div class="col-4 form-group form-check mt-3">
+			<label for="fc" style="font-weight: bold; font-size: 14px;">Cantidad de Consultas</label>
+			<select class="form-control" id="fc" name="fc" required>
+				<option value="50" <?php if(@$_GET["fc"]==50){echo "Selected"; } ?>>50</option>
+				<option value="100" <?php if(@$_GET["fc"]==100){echo "Selected"; } ?>>100</option>
+				<option value="200" <?php if(@$_GET["fc"]==200){echo "Selected"; } ?>>200</option>
+				<option value="500" <?php if(@$_GET["fc"]==500){echo "Selected"; } ?>>500</option>
+				<option value="1000" <?php if(@$_GET["fc"]==1000){echo "Selected"; } ?>>1000</option>
+				<option value="0" <?php if(@$_GET["fc"]=="0"){echo "Selected"; } ?>>Todos</option>
+			</select>
+		</div>
+		<div class="col-4 form-group form-check mt-3">
+			<label for="fs" style="font-weight: bold; font-size: 14px;">Sedes</label>
+			<select class="form-control" id="fs" name="fs">
+				<option value="">Todos</option>
+				<?php
+				$sql1 = "SELECT * FROM sedes";
+				$proceso1 = mysqli_query($conexion,$sql1);
+				while($row1 = mysqli_fetch_array($proceso1)) { ?>
+					<option value="<?php echo $row1['id']; ?>" <?php if(@$_GET["fs"]==$row1['id']){echo "Selected"; } ?>><?php echo $row1['nombre']; ?></option>
+				<?php } ?>
+			</select>
+		</div>
+		<div class="col-4 form-group text-center form-check mt-3">
+			<label for="fc" style="font-weight: bold; font-size: 14px;">&nbsp;</label>
+			<p>
+				<button type="submit" class="btn btn-primary">Filtrar</button>
+			</p>
 		</div>
 	</div>
 </form>
@@ -229,7 +217,6 @@ while($rowub2 = mysqli_fetch_array($procesoub2)) {
 		</tbody>
 	</table>
 </div>
--->
 
 <!-- Modal Editar Bancarios -->
 	<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -360,6 +347,7 @@ while($rowub2 = mysqli_fetch_array($procesoub2)) {
 	</div>
 <!-- FIN Modal Editar Bancarios -->
 
+
 </body>
 </html>
 
@@ -373,39 +361,52 @@ while($rowub2 = mysqli_fetch_array($procesoub2)) {
 <script>
 
 	$(document).ready(function() {
-		prueba1();
-	} );
+    	var table = $('#example').DataTable( {
+        	"lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
 
-	function prueba1(){
-		var pagina = $('#datatables').data('pagina');
-		var consultasporpagina = $('#datatables').data('consultasporpagina');
-		var sede = $('#datatables').data('sede');
-		var filtrado = $('#datatables').data('filtrado');
+        	"language": {
+	            "lengthMenu": "Mostrar _MENU_ Registros por página",
+	            "zeroRecords": "No se ha encontrado resultados",
+	            "info": "Ubicado en la página <strong>_PAGE_</strong> de <strong>_PAGES_</strong>",
+	            "infoEmpty": "Sin registros actualmente",
+	            "infoFiltered": "(Filtrado de <strong>_MAX_</strong> total registros)",
+	            "paginate": {
+			        "first":      "Primero",
+			        "last":       "Última",
+			        "next":       "Siguiente",
+			        "previous":   "Anterior"
+			    },
+			    "search": "Buscar",
+        	},
 
-		$.ajax({
-			type: 'POST',
-			url: '../script/crud_pasantes.php',
-			dataType: "JSON",
-			data: {
-				"pagina": pagina,
-				"consultasporpagina": consultasporpagina,
-				"sede": sede,
-				"filtrado": filtrado,
-				"condicion": "table1",
-			},
+        	"paging": true,
+        	"order": [[ 9, "desc" ]],
 
-			success: function(respuesta) {
-				console.log(respuesta);
-				if(respuesta["estatus"]=="ok"){
-					$('#resultado_table1').html(respuesta["html"]);
-				}
-			},
+    	} );
 
-			error: function(respuesta) {
-				console.log(respuesta['responseText']);
-			}
+
+    	/***************POPOVERS*******************/
+		$(function () {
+			$('[data-toggle="popover"]').popover()
+		})
+
+		// popovers initialization - on hover
+		$('[data-toggle="popover-hover"]').popover({
+		  html: true,
+		  trigger: 'hover',
+		  placement: 'bottom',
+		  /*content: function () { return '<img src="' + $(this).data('img') + '" />'; }*/
 		});
-	}
+
+		// popovers initialization - on click
+		$('[data-toggle="popover-click"]').popover({
+		  html: true,
+		  trigger: 'click',
+		  placement: 'bottom',
+		  content: function () { return '<img src="' + $(this).data('img') + '" />'; }
+		});
+    	/******************************************/
+	} );
 
 	$('#myModal').on('shown.bs.modal', function () {
 	  	$('#myInput').trigger('focus')

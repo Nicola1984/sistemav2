@@ -182,7 +182,6 @@ session_destroy();
 	        		$('#usuario_estatus2').val(respuesta["estatus"]);
 	        		$('#formulario3').submit();
 	        	}else{
-	        		console.log("aqui3");
 	        		$('#usuario_id').val(respuesta["usuario_id"]);
 	        		$('#usuario_estatus').val(respuesta["estatus"]);
 	        		$('#formulario2').submit();

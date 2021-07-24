@@ -1,5 +1,5 @@
 <?php
-$sqlh1 = "SELECT * FROM funciones_usuarios WHERE id_usuarios = ".$_SESSION["id"]." ORDER BY id_modulos ASC";
+$sqlh1 = "SELECT * FROM funciones_usuarios WHERE id_usuarios = ".$_SESSION["camaleonapp_id"]." and id_usuario_rol = '".$_SESSION['camaleonapp_estatus']."' ORDER BY id_modulos ASC";
 $procesoh1 = mysqli_query($conexion,$sqlh1);
 $navbar1 = '';
 while($row1 = mysqli_fetch_array($procesoh1)) {
@@ -26,57 +26,40 @@ while($row1 = mysqli_fetch_array($procesoh1)) {
 			break;
 
 			case 'modelos':
-				if($ubicacion==$modulos_nombre){
-					$navbar1 .= '
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								MODELOS
-							</a>
-					';
-					$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["id"];
-					$procesoh3 = mysqli_query($conexion,$sqlh3);
-					$contadorh3 = mysqli_num_rows($procesoh3);
-					if($contadorh3>=1){
-						$navbar1 .= '<div class="dropdown-menu" aria-labelledby="navbarDropdown">';
-						while($row3 = mysqli_fetch_array($procesoh3)) {	
-							$id_modulos_sub = $row3["id_modulos_sub"];
-							$sqlh4 = "SELECT * FROM modulos_sub WHERE id = ".$id_modulos_sub;
-							$procesoh4 = mysqli_query($conexion,$sqlh4);
-							while($row4 = mysqli_fetch_array($procesoh4)) {
-								$modulos_sub_url = $row4["url"];
-								$modulos_sub_nombre = $row4["nombre"];
-								$navbar1 .= '<a class="dropdown-item" href="'.$modulos_sub_url.'">'.$modulos_sub_nombre.'</a>';
-							}
-						}
-						$navbar1 .= '</div>';
+				$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["camaleonapp_id"];
+				$procesoh3 = mysqli_query($conexion,$sqlh3);
+				$contadorh3 = mysqli_num_rows($procesoh3);
+				if($contadorh3>=1){
+					if($ubicacion==$modulos_nombre){
+						$navbar1 .= '
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle
+						'; 
+						if($ubicacion==$modulos_nombre){$navbar1 .= ' active ';}
+						$navbar1 .= '" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									MODELOS
+								</a>
+						';
 					}
-					$navbar1 .= '</li>';
-				}else{
-					$navbar1 .= '
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								MODELOS
-							</a>
-					';
-					$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["id"];
-					$procesoh3 = mysqli_query($conexion,$sqlh3);
-					$contadorh3 = mysqli_num_rows($procesoh3);
-					if($contadorh3>=1){
-						$navbar1 .= '<div class="dropdown-menu" aria-labelledby="navbarDropdown">';
-						while($row3 = mysqli_fetch_array($procesoh3)) {	
-							$id_modulos_sub = $row3["id_modulos_sub"];
-							$sqlh4 = "SELECT * FROM modulos_sub WHERE id = ".$id_modulos_sub;
-							$procesoh4 = mysqli_query($conexion,$sqlh4);
-							while($row4 = mysqli_fetch_array($procesoh4)) {
-								$modulos_sub_url = $row4["url"];
-								$modulos_sub_nombre = $row4["nombre"];
-								$navbar1 .= '<a class="dropdown-item" href="../modelos/'.$modulos_sub_url.'">'.$modulos_sub_nombre.'</a>';
-							}
+						
+					$navbar1 .= '<div class="dropdown-menu" aria-labelledby="navbarDropdown">';
+						
+					while($row3 = mysqli_fetch_array($procesoh3)) {	
+						$id_modulos_sub = $row3["id_modulos_sub"];
+						$sqlh4 = "SELECT * FROM modulos_sub WHERE id = ".$id_modulos_sub;
+						$procesoh4 = mysqli_query($conexion,$sqlh4);
+						while($row4 = mysqli_fetch_array($procesoh4)) {
+							$modulos_sub_url = $row4["url"];
+							$modulos_sub_nombre = $row4["nombre"];
+							$navbar1 .= '<a class="dropdown-item" href="'.$modulos_sub_url.'">'.$modulos_sub_nombre.'</a>';
 						}
-						$navbar1 .= '</div>';
 					}
+						
+					$navbar1 .= '</div>';
 					$navbar1 .= '</li>';
+						
 				}
+
 			break;
 
 			case 'paginas':
@@ -103,7 +86,7 @@ while($row1 = mysqli_fetch_array($procesoh1)) {
 								PRESABANAS
 							</a>
 					';
-					$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["id"];
+					$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["camaleonapp_id"];
 					$procesoh3 = mysqli_query($conexion,$sqlh3);
 					$contadorh3 = mysqli_num_rows($procesoh3);
 					if($contadorh3>=1){
@@ -125,10 +108,10 @@ while($row1 = mysqli_fetch_array($procesoh1)) {
 					$navbar1 .= '
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								MODELOS
+								PRESABANAS
 							</a>
 					';
-					$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["id"];
+					$sqlh3 = "SELECT * FROM modulos_sub_usuarios WHERE id_usuarios = ".$_SESSION["camaleonapp_id"];
 					$procesoh3 = mysqli_query($conexion,$sqlh3);
 					$contadorh3 = mysqli_num_rows($procesoh3);
 					if($contadorh3>=1){

@@ -86,17 +86,38 @@
                 	$diferenciapagina = 3;
 
                 	/*********MENOS********/
-
-                	if($pagina<=$diferenciapagina){
-                		$opcionmenos = $pagina;
-                	}else{
-                		$opcionmenos = $pagina-$diferenciapagina;
-                	}
-                	
-					for ($x=$pagina;$x<=$opcionmenos;$x++) { ?>
-	                    <li class="page-item <?php if ($x == $pagina) echo "active" ?>">
-	                        <a class="page-link" href="./test5.php?pagina=<?php echo $x ?>">
-	                            <?php echo $x ?>
+                	if($pagina==2){ ?>
+                		<li class="page-item">
+	                        <a class="page-link" href="./test5.php?pagina=<?php echo $pagina-1 ?>">
+	                            <?php echo $pagina-1 ?>
+	                        </a>
+	                    </li>
+                	<?php
+                	}else if($pagina==3){ ?>
+	                    <li class="page-item">
+	                        <a class="page-link" href="./test5.php?pagina=<?php echo $pagina-2 ?>">
+	                            <?php echo $pagina-2 ?>
+	                        </a>
+	                    </li>
+	                    <li class="page-item">
+	                        <a class="page-link" href="./test5.php?pagina=<?php echo $pagina-1 ?>">
+	                            <?php echo $pagina-1 ?>
+	                        </a>
+	                    </li>
+                	<?php }else if($pagina>=4){ ?>
+                		<li class="page-item">
+	                        <a class="page-link" href="./test5.php?pagina=<?php echo $pagina-3 ?>">
+	                            <?php echo $pagina-3 ?>
+	                        </a>
+	                    </li>
+	                    <li class="page-item">
+	                        <a class="page-link" href="./test5.php?pagina=<?php echo $pagina-2 ?>">
+	                            <?php echo $pagina-2 ?>
+	                        </a>
+	                    </li>
+	                    <li class="page-item">
+	                        <a class="page-link" href="./test5.php?pagina=<?php echo $pagina-1 ?>">
+	                            <?php echo $pagina-1 ?>
 	                        </a>
 	                    </li>
                 	<?php }

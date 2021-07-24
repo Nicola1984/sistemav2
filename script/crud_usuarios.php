@@ -9,11 +9,14 @@ if($condicion=='login1'){
 	$estatus = $_POST['estatus'];
 
 	if($estatus=='Pasantia'){
+
 		$sql1 = "SELECT * FROM usuarios WHERE correo_empresa = '".$usuario."' and clave = '".$clave."' and estatus_pasantia = 1 LIMIT 1";
 	}else if($estatus=='Modelo'){
 		$sql1 = "SELECT * FROM usuarios WHERE correo_personal = '".$usuario."' and clave = '".$clave."' and estatus_modelo = 1 LIMIT 1";
 	}else if($estatus=='Nomina'){
-		$sql1 = "SELECT * FROM usuarios WHERE correo_empresa = '".$usuario."' and clave = '".$clave."' and estatus_nomina = 1 LIMIT 1";
+		$sql1 = "SELECT dno.id as id FROM usuarios us 
+		INNER JOIN datos_nominas dno ON us.id = dno.id_usuarios 
+		WHERE correo_empresa = '".$usuario."' and clave = '".$clave."' and estatus_nomina = 1 LIMIT 1";
 	}else if($estatus=='Satelite'){
 		$sql1 = "SELECT * FROM usuarios WHERE correo_personal = '".$usuario."' and clave = '".$clave."' and estatus_satelite = 1 LIMIT 1";
 	}else if($estatus=='Empresa'){
